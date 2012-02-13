@@ -87,8 +87,11 @@ def login_handle():
 
 @app.route('/')
 def index():
-    posts = 'Stuff'#Post.all()
-    return render_template('index.html', posts=posts)
+    if session.get('logged_in'):
+        posts = 'Stuff'#Post.all()
+        return render_template('index.html', posts=posts)
+    else:
+        return render_template('locked.html')
 
 
 @app.route('/new', methods=['GET', 'POST'])
