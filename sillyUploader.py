@@ -3,28 +3,16 @@ sillyUploader.py
 ===========
 A heavily stripped version of the flask-uploads example: https://github.com/fdemmer/flask-uploads
 """
+
+from prefs import *
+
 import datetime
 import uuid
 from flask import (Flask, request, url_for, redirect, render_template, flash,
                    session, g)
-#from flaskext.couchdb import (CouchDBManager, Document, TextField,
-#                              DateTimeField, ViewField)
+
 from flaskext.uploads import (UploadSet, configure_uploads, IMAGES,
                               UploadNotAllowed)
-
-# defaults
-
-DEBUG = False
-SECRET_KEY = ('\xa3\xb6\x15\xe3E\xc4\x8c\xbaT\x14\xd1:'
-              '\xafc\x9c|.\xc0H\x8d\xf2\xe5\xbd\xd5')
-
-UPLOADED_PHOTOS_DEST = '/tmp/photolog'
-
-ADMIN_USERNAME = 'admin'
-ADMIN_PASSWORD = 'flaskftw'
-
-#COUCHDB_SERVER = 'http://localhost:5984/'
-#COUCHDB_DATABASE = 'flask-photolog'
 
 
 # application
@@ -32,6 +20,7 @@ ADMIN_PASSWORD = 'flaskftw'
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config.from_envvar('PHOTOLOG_SETTINGS', silent=True)
+app.config['TITLE'] = TITLE
 
 
 # uploads
@@ -42,7 +31,6 @@ configure_uploads(app, uploaded_photos)
 
 # documents
 
-#manager = CouchDBManager()
 
 def unique_id():
     return hex(uuid.uuid4().time)[2:-1]
@@ -95,9 +83,9 @@ def index():
 @app.route('/new', methods=['GET', 'POST'])
 def new():
     if request.method == 'POST':
-        photo = 'A photo' #request.files.get('photo')
-        title = 'Photo Title' #request.form.get('title')
-        caption = 'Photo Caption' #request.form.get('caption')
+        photo = request.files.get('photo')
+        title = request.form.get('title')
+        caption = request.form.get('caption')
         if not (photo and title and caption):
             flash("You must fill in all the fields")
         else:
