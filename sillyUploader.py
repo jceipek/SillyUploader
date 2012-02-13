@@ -20,7 +20,6 @@ from flaskext.uploads import (UploadSet, configure_uploads, IMAGES,
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config.from_envvar('PHOTOLOG_SETTINGS', silent=True)
-app.config['TITLE'] = TITLE
 
 
 # uploads
